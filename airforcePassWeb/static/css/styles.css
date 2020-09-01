@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+
+body{
+    background-color:  #222222;
+    height: 100vh;
+}
+
+/*#region glitch*/
+    #glitch-container1{
+        position: relative;
+        margin: auto;
+        overflow: hidden;   
+        background-image: url(../src/fingerPrint.png); 
+        background-size: contain;
+        background-position: inherit;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+
+    }
+
+    .glitch-img1{
+        position: relative;
+        background-image: url(../src/fingerPrint.png);
+        background-color: #111111;
+        background-size: contain;
+        background-position: inherit;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        overflow: hidden; 
+    }
+
+    .glitch-container{
+        position: relative;
+        margin-top: 100px;
+    }
+
+    img.glitch-img{
+        width: 300px;
+        left: 0; 
+        right: 0; 
+        margin-left: auto; 
+        margin-right: auto;
+        position: absolute;
+        opacity: 0.5;
+        filter: invert(48%) sepia(13%) saturate(32507%) hue-rotate(130deg) brightness(95%) contrast(80%);
+
+    }
+
+    .glitch{
+        position: absolute;
+        left: 0; 
+        right: 0; 
+        margin-left: auto; 
+        margin-right: auto; 
+    }
+/*#endregion glitch*/
+
+/* #region TypeWriter */
+
+    .typewriter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+    div.typewriter-container p.static-typed-text {
+    font-size: 3rem;
+    padding: 0.5rem;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+    text-align: center;
+    overflow: hidden;
+    }
+
+    div.typewriter-container p.static-typed-text span.typed-text {
+    font-weight: normal;
+    color: #00eeff;
+    }
+
+    div.typewriter-container p.static-typed-text span.cursor {
+    display: inline-block;
+    background-color: #00eeff;
+    margin-left: 0.1rem;
+    width: 3px;
+    animation: blink 1s infinite;
+    }
+
+    div.typewriter-container p.static-typed-text span.cursor.typing {
+    animation: none;
+    }
+    @keyframes blink {
+    0%  { background-color: #00eeff; }
+    49% { background-color: #00eeff; }
+    50% { background-color: transparent; }
+    99% { background-color: transparent; }
+    100%  { background-color:  #00eeff  ; }
+    }
+/* #endregion TypeWriter */

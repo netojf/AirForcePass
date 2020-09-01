@@ -1,0 +1,35 @@
+{% extends "shared/layout.html" %}
+{% load static %}
+
+
+{% block body %}
+    {% comment %} <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            {{form_login.username.errors}}
+            <label>Username: </label>
+            {{form_login.username}}
+        </div>
+
+        <div class="form-group">
+            {{form_login.password.errors}}
+            <label>Senha: </label>
+            {{form_login.password}}
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Enviar" class="btn btn-primary">
+        </div>
+    </form> {% endcomment %}
+
+    <div class="glitch-container" >
+        <img class="glitch-img" src="{% static 'img/fingerPrint.png' %}">
+    </div>
+
+    <div class="typewriter-container">
+        <p class="static-typed-text"><span class="typed-text">Bem Vindo!|Aguardando Atividade...</p>
+    </div>
+    
+
+{% endblock body%}
