@@ -1,25 +1,17 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect, reverse
 from django import forms
-
-# Create your views here.
-from django.urls import reverse
-
-class userForm(forms.Form):
-    name = forms.CharField(label="Nome")
-    cpf = forms.NumberInput()
-    saram = forms.CharField(label='Saram')
-    email = forms.EmailField(label='E-mail')
-    confirmEmail = forms.EmailField(label='Confirmação de e-mail')
-    birthDate = forms.DateField()
+import logging
+logger = logging.getLogger('app_api') #from LOGGING.loggers in settings.py
+from .forms import userForm, userPropForm
 
 
 def index(request):
     if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('airforcePassWeb:login'))
+        return HttpResponseRedirect(reverse('airforcePassWeb:signIn'))
 
     users = User.objects.all()
     return render(request, 'users/index.html', {
@@ -27,47 +19,64 @@ def index(request):
     })
 
 
-def userLogin(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        usuario = authenticate(request, username=username, password=password)
-        if usuario:
-            login(request, user=usuario)
-            return redirect('users/index')
-        else:
-            form_login = AuthenticationForm()
-    else:
-        form_login = AuthenticationForm()
-    return render(request, 'users/login.html', {'form_login': form_login})
-
-
 def userSignIn(request):
-    if request.method == "POST":
-        form_usuario = UserCreationForm(request.POST)
-        if form_usuario.is_valid():
-            form_usuario.save()
-            return redirect('index')
-    else:
-        form_usuario = UserCreationForm()
-    return render(request, 'users/userSignIn.html', {
-        'form_usuario': form_usuario
-    })
+    userform = userForm()
+    propform = userPropForm()
+    if not request.user.is_authenticated:
+        if request.method == 'POST':
+            logger.info(request.POST["username"])
+            
+            username = request.POST["username"]
+            password = request.POST["password"]
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse("airforcePassWeb:index"))
+            else:
+                return render(request, 'users/userSignIn.html', {
+                    "message" : "blocked",
+                    'userform' : userform,
+                    'propertyform' : propform
+                })
+        return render(request, 'users/userSignIn.html', {
+                    "message" : "login",
+                    'userform' : userform,
+                    'propertyform' : propform
+                })
+    
+    return HttpResponseRedirect(reverse('airforcePassWeb:index'))
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect( str(request.META.get('HTTP_REFERER')), {
+                "message": "Logged Out"
+            })
+
 
 def userSignUp(request):
     if request.method == 'POST':
-        form1 = userForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            form1.save()
+        print('postsignup')
+        userform = userForm(request.POST)
+        if userform.is_valid():
+            userform.save()
             return HttpResponseRedirect('Cadastrado com sucesso!')
         else:
             return HttpResponseRedirect('Usuário Inválido!')
 
-    # if a GET (or any other method) we'll create a blank form
     else:
-        form1 = userForm()
-        return render(request, 'users/index.html',{
-            "form1" : form1
+        userform = userForm()
+        propform = userPropForm()
+        if (not propform):
+            print ("nulo aqui tbm")
+        else:   
+            print ('alguma coisa ta errada')
+        return render(request, 'users/userSignUp.html',{
+            "userform" : userform,
+            'propertyform' : propform
     })
+
+
+
 
