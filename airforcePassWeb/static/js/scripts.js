@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     cursorSpan.innerHTML = '&nbsp'; 
     const typingDelay = 75;
     const erasingDelay = 75;
-    const newTextDelay = 500; // Delay between current and next text
+    const newTextDelay = 1000; // Delay between current and next text
     let textArrayIndex = 0;
     let charIndex = 0;
 

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
 
 body{
@@ -6,7 +7,7 @@ body{
     height: 100vh;
 }
 
-user-img{
+.user-img{
     width: 300px;
     max-height: 600px;
 }
@@ -82,6 +83,8 @@ user-img{
     font-weight: normal;
     color: white;
     filter: invert(48%) sepia(13%) saturate(32507%) hue-rotate(130deg) brightness(95%) contrast(80%);
+    font-family: 'Orbitron', sans-serif;
+
     }
 
     div.typewriter-container p.static-typed-text span.cursor {
