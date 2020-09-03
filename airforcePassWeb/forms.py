@@ -17,8 +17,7 @@ class userForm(ModelForm):
     password1 = forms.CharField(label="Senha",
         widget=forms.PasswordInput)
     password2 = forms.CharField(label="Confirmação da Senha",
-        widget=forms.PasswordInput,
-        help_text=("Re-digite a senha para verificação"))
+        widget=forms.PasswordInput)
     email = forms.EmailField( required=True)
 
     class Meta:
