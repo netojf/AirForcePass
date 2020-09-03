@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-{% load bootstrap4 %} 
-{% bootstrap_css %}
-{# Load CSS and JavaScript #}
 
+{% load bootstrap4 %}
+{% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %} 
 {% bootstrap_messages %} {# Display django.contrib.messages as Bootstrap alerts #}
+{{ STATIC_URL }}
+
 {% load static %}
-
-
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <script src="{% static 'js/scripts.js' %}"></script>
+     <script src="{% static 'js/scripts.js' %}"></script> 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    
     <title>AirForcePass</title>
 
 </head>
@@ -31,16 +29,13 @@
             <ul class="navbar-nav mr-auto align-items-center">
 
                 <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'airforcePassWeb:index' %}">Ínicio <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{% url 'airforcePassWeb:signIn' %}">Ínicio <span class="sr-only">(current)</span></a>
                 </li>
-                {% comment %} {% if request.user.is_superuser %}
+                 {% if request.user.is_superuser %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
                     </li>
                 {% endif %} 
-                {% endcomment %}
-                
-
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
@@ -67,10 +62,6 @@
                             <form class="form" action="{% url 'airforcePassWeb:signIn' %}" method="POST">
                                 {% csrf_token %}
 
-                                {% if message %}
-                                    <p class="text-danger">{{ message }}</p>
-                                {% endif %}
-
                                 <div class="form-group">
                                   <label for="username-field">Usuário</label>
                                   <input type="text" class="form-control" id="username-field" name="username" >
@@ -85,8 +76,8 @@
                             </form>
 
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Cadastrar</a>
-                            <a class="dropdown-item" href="#">Esqueceu a Senha?</a>
+                            {% comment %}<a class="dropdown-item" href="#">Cadastrar</a>{% endcomment %}
+                             <a class="dropdown-item" href="#">Esqueceu a Senha?</a> 
                         </div>
                     </li>
                 {% endif %}
@@ -115,18 +106,21 @@
       {% comment %} 
             formulario de cadastro
        {% endcomment %}
-        <form action="{% url 'airforcePassWeb:signUp' %}" method="post">
+        <form action="{% url 'airforcePassWeb:signUp'  %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ userform.as_p }}
             {{ propertyform.as_p }}
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>  
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-      </div>
+      
     </div>
   </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 </body>
 </html>

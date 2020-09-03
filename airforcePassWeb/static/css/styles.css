@@ -6,6 +6,11 @@ body{
     height: 100vh;
 }
 
+user-img{
+    width: 300px;
+    max-height: 600px;
+}
+
 /*#region glitch*/
     #glitch-container1{
         position: relative;
@@ -70,16 +75,18 @@ body{
     letter-spacing: 0.1rem;
     text-align: center;
     overflow: hidden;
+    filter: invert(48%) sepia(13%) saturate(32507%) hue-rotate(130deg) brightness(95%) contrast(80%);
     }
 
     div.typewriter-container p.static-typed-text span.typed-text {
     font-weight: normal;
-    color: #00eeff;
+    color: white;
+    filter: invert(48%) sepia(13%) saturate(32507%) hue-rotate(130deg) brightness(95%) contrast(80%);
     }
 
     div.typewriter-container p.static-typed-text span.cursor {
     display: inline-block;
-    background-color: #00eeff;
+    background-color: #00ff22;
     margin-left: 0.1rem;
     width: 3px;
     animation: blink 1s infinite;
@@ -89,10 +96,10 @@ body{
     animation: none;
     }
     @keyframes blink {
-    0%  { background-color: #00eeff; }
-    49% { background-color: #00eeff; }
+    0%  { background-color: #00ff22; }
+    49% { background-color: #00ff22; }
     50% { background-color: transparent; }
     99% { background-color: transparent; }
-    100%  { background-color:  #00eeff  ; }
+    100%  { background-color:  #00ff22  ; }
     }
 /* #endregion TypeWriter */

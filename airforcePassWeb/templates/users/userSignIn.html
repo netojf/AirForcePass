@@ -24,6 +24,16 @@
         </div> 
     {% endif %}
 
+    {% if message == 'logged' %}
+        <div class="d-flex justify-content-center" style="margin-top: 100px">
+            <img class="user-img" src="{{user.userproperties.photo.url}}" >
+        </div>
+
+        <div class="typewriter-container">
+            <p class="static-typed-text"><span class="typed-text">{{ user.username}}</p>
+        </div> 
+    {% endif %}
+
     {% if message == 'blocked' %}
         <div class="glitch-container" >
             <img class="glitch-img" src="{% static 'img/Lock.png' %}">

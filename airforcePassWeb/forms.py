@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .models import userProperties, dependent
 from django import forms
 from django.forms import ModelForm
+from AirforcePass import settings
 
 
 class userForm(ModelForm):
@@ -36,12 +37,16 @@ class userForm(ModelForm):
             )
         return password2
 
+    # def is_valid(self):
+    #     return True
+
     def save(self, commit=True):
         user = super(userForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
         user.email = self.cleaned_data['email']
+        
 
         if commit:
             user.save()
@@ -50,30 +55,31 @@ class userForm(ModelForm):
     
 
 class userPropForm(forms.ModelForm):
-    birthdate = forms.DateField(
+    birthDate = forms.DateField(
         label = "Data de Aniversário",
          required=False,
-         input_formats=['%d/%m/%Y'],
-         widget=forms.DateInput(format = '%d/%m/%Y'),
-         )
+         widget=forms.DateInput(attrs={'type':'date'} , format = '%d/%m/%Y'))
 
     photo = forms.ImageField(
         label="Foto", 
         required=False)
 
-    cpf = forms.CharField(max_length=11 ,widget=forms.TextInput(attrs={'data-mask':"000.000.000.00"}))
+    cpf = forms.CharField(max_length=14 ,widget=forms.TextInput( attrs={'data-mask':"000.000.000.00",}))
 
     class Meta:
         model = userProperties
         exclude = ['user']
 
-    def save(self, commit=True):
-        userprop = super(userPropForm, self).save(commit=False)
-        userprop.cpf(self.cleaned_data["cpf"])
-        userprop.saram = self.cleaned_data['saram']
-        userprop.birthdate = self.cleaned_data['birthdate']
-        userprop.photo = self.cleaned_data['photo']
+    # def is_valid(self):
+    #     return True
 
+    def save(self,user, commit=True):
+        userprop = super(userPropForm, self).save(commit=False)
+        userprop.cpf = (self.cleaned_data["cpf"])
+        userprop.saram = self.cleaned_data['saram']
+        userprop.birthdate = self.cleaned_data['birthDate']
+        userprop.photo = self.cleaned_data['photo']
+        userprop.user = user
         if commit:
             userprop.save()
         return userprop

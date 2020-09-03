@@ -2,5 +2,46 @@
 {% load static %}
 
 {% block body %}
-    <h1 style='color: white;'>{{ request.user.username }}</h1>
+
+    {% if message == 'login'  %}
+        <div class="glitch-container" >
+            <img class="glitch-img" src="{% static 'img/fingerPrint.png' %}">
+        </div>
+
+        <div class="typewriter-container">
+            <p class="static-typed-text"><span class="typed-text">Bem Vindo!|Aguardando Atividade...</p>
+        </div> 
+
+    {% endif %}
+    
+    {% if message == 'loading' %}
+        <div class="glitch-container" >
+            <img class="glitch-img" src="{% static 'img/fingerPrint.png' %}">
+        </div>
+
+        <div class="typewriter-container">
+            <p class="static-typed-text"><span class="typed-text">Aguarde...</p>
+        </div> 
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <div class="d-flex justify-content-center" style="margin-top: 100px">
+            <img class="user-img" src="{{request.user.userproperties.photo.url}}" >
+        </div>
+
+        <div class="typewriter-container">
+            <p class="static-typed-text"><span class="typed-text">{{ request.user.username}}</p>
+        </div> 
+    {% endif %}
+
+    {% if message == 'blocked' %}
+        <div class="glitch-container" >
+            <img class="glitch-img" src="{% static 'img/Lock.png' %}">
+        </div>
+
+        <div class="typewriter-container">
+            <p class="static-typed-text"><span class="typed-text">Acesso Negado!|Tente Novamente...</p>
+        </div> 
+    {% endif %}
+
 {% endblock body%}
