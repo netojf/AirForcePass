@@ -1,7 +1,7 @@
 {% extends "shared/layout.html" %}
 {% load static %}
 {% block body %}
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    {% comment %} <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> {% endcomment %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>                                                                        
     {% if message == 'login'  %}
         <div class="glitch-container" >
@@ -24,13 +24,13 @@
         </div> 
     {% endif %}
 
-    {% if message == 'logged' %}
+    {% if request.user.is_authenticated %}
         <div class="d-flex justify-content-center" style="margin-top: 100px">
-            <img class="user-img" src="{{user.userproperties.photo.url}}" >
+            <img class="user-img" src="{{request.user.userproperties.photo.url}}" >
         </div>
 
         <div class="typewriter-container">
-            <p class="static-typed-text"><span class="typed-text">{{ user.username}}</p>
+            <p class="static-typed-text"><span class="typed-text">{{ request.user.username}}</p>
         </div> 
     {% endif %}
 

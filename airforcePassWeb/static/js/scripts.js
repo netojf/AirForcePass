@@ -83,7 +83,7 @@ window.onload = (event) => {
 //#region TypeWriter
 
 document.addEventListener('DOMContentLoaded', (event) => {
-        
+    //get 
     let typedTextSpan = document.getElementsByClassName('typed-text')[0];
 
     const textArray = typedTextSpan.textContent.split('|');
@@ -94,12 +94,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     cursorSpan.innerHTML = '&nbsp&nbsp'; 
     const typingDelay = 75;
     const erasingDelay = 100;
-    const newTextDelay = 500; // Delay between current and next text
+    const newTextDelay = 1000; // Delay between current and next text
     let textArrayIndex = 0;
     let charIndex = 0;
 
     typeWriterContainer = document.getElementsByClassName('typewriter-container');
-
+ 
+    // add a cursor to all 'typewriter-container' class ↓
     for (let index = 0; index < typeWriterContainer.length; index++) {
 
         staticTexts = typeWriterContainer[index].getElementsByClassName("static-typed-text");

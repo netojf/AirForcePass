@@ -19,8 +19,11 @@
 <body>
 
     <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #111111">
-
-        <a class="navbar-brand" style="color: #fcb414; text-shadow: 1px 1px 6px #e71837; " href="#">AirforceAccess</a>
+        
+        <a class="navbar-brand" style="color: #fcb414; text-shadow: 1px 1px 6px #e71837; " href="#">
+            <img class="d-inline-block align-middle mr-2" src="{% static 'img/favicon.ico' %}"/>
+            AirforceAccess
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -38,18 +41,23 @@
                 {% endif %} 
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a type="button" class="nav-link" data-toggle="modal" data-target="#exampleModal">Cadastrar <span class="sr-only">(current)</span></a>
-                </li>
+                {% comment %} checks if user is authenticated for  showing controls from login and register {% endcomment %}
+                
                 {% if request.user.is_authenticated %}
-                    {# usuário logado #}
-                    <li class="nav-item active ">
+                    {# shows user name #}
+                    <li class="nav-item active " data-toggle="modal" data-target="#exampleModal">
                         <a type="button" class="nav-link">{{ request.user.username }} </a>
                     </li>
+                    {% comment %} shows logout option {% endcomment %}
                     <li class="nav-item active ">
                         <a href="{% url 'airforcePassWeb:logout' %}" class="nav-link" type="button" >Sair</a>
                     </li>
                 {% else %}
+                    {% comment %} user register modal call button {% endcomment %}
+                    <li class="nav-item active">
+                        <a type="button" class="nav-link" data-toggle="modal" data-target="#exampleModal">Cadastrar <span class="sr-only">(current)</span></a>
+                    </li>
+                    {% comment %} user login dropdown menu {% endcomment %}
                     <li class="nav-item dropdown active dropleft">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -80,6 +88,7 @@
                              <a class="dropdown-item" href="#">Esqueceu a Senha?</a> 
                         </div>
                     </li>
+
                 {% endif %}
                 
             </ul>
@@ -89,7 +98,36 @@
 
 {% block body %}
 {% endblock %}
+{% comment %} user register modal {% endcomment %}
+<div class="modal fade in" id="exampleModal" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cadastro</h5>
 
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        
+      </div>
+      <div class="modal-body">
+        {% comment %} User register Form {% endcomment %}
+        {% if not request.user.is_authenticated %}
+            <form action="{% url 'airforcePassWeb:signUp'  %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ userform.as_p }}
+                {{ propertyform.as_p }}
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>  
+            </form>
+        {% endif %}
+      </div>
+      
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -99,27 +137,35 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-
+        
       </div>
       <div class="modal-body">
-
-      {% comment %} 
-            formulario de cadastro
-       {% endcomment %}
-        <form action="{% url 'airforcePassWeb:signUp'  %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ userform.as_p }}
-            {{ propertyform.as_p }}
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Salvar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-            </div>  
-        </form>
+        {% comment %} User register Form {% endcomment %}
+        {% if not request.user.is_authenticated %}
+            <form action="{% url 'airforcePassWeb:signUp'  %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ userform.as_p }}
+                {{ propertyform.as_p }}
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>  
+            </form>
+        {% endif %}
       </div>
       
     </div>
   </div>
 </div>
+
+{% if modalMessage %}
+    <script type="text/javascript">
+    $(window).on('load',function(){
+        $('#exampleModal').modal('show');
+    });
+</script>
+{% endif %}
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 </body>

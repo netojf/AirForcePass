@@ -4,21 +4,43 @@ from .models import userProperties, dependent
 from django import forms
 from django.forms import ModelForm
 from AirforcePass import settings
+from django.forms.utils import ErrorList
 
+
+class DangerTextClass(ErrorList):
+    def __str__(self):
+        return self.as_custom
+
+    def as_custom(self):
+        if not self: return ''
+        return '<div class="errorlist">%s</div>' % ''.join(['<div class="text-danger">%s</div>' % e for e in self])
 
 class userForm(ModelForm):
 
     error_messages = {
         'password_mismatch': "As duas senhas devem coincidir",
+        'username_exists' : "Usuário já existe"
     }
-    username = forms.CharField(label="Usuário", help_text="")
-    first_name = forms.CharField(label="Nome")
-    last_name = forms.CharField(label="Sobrenome")
+    error_class = DangerTextClass
+
+    username = forms.CharField(label="Usuário", error_messages={}, help_text="", 
+    widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    first_name = forms.CharField(label="Nome", 
+    widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    last_name = forms.CharField(label="Sobrenome", 
+    widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     password1 = forms.CharField(label="Senha",
-        widget=forms.PasswordInput)
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
     password2 = forms.CharField(label="Confirmação da Senha",
-        widget=forms.PasswordInput)
-    email = forms.EmailField( required=True)
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+    email = forms.EmailField( required=True,
+     widget= forms.EmailInput(attrs={'class': 'form-control'}))
+
 
     class Meta:
         model = User
@@ -36,8 +58,18 @@ class userForm(ModelForm):
             )
         return password2
 
-    # def is_valid(self):
-    #     return True
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+
+        if User.objects.exclude(pk=self.instance.pk).get(username=username):
+            raise forms.ValidationError( 
+            self.error_messages['username_exists'],  #my error message
+            code='username_exists'  #set the error message key
+            )
+        else:
+            return username # if user does not exist so we can continue the registration process
+
 
     def save(self, commit=True):
         user = super(userForm, self).save(commit=False)
@@ -57,20 +89,19 @@ class userPropForm(forms.ModelForm):
     birthDate = forms.DateField(
         label = "Data de Aniversário",
          required=False,
-         widget=forms.DateInput(attrs={'type':'date'} , format = '%d/%m/%Y'))
+         widget=forms.DateInput(attrs={'type':'date','class':'form-control'} , format = '%d/%m/%Y'))
 
     photo = forms.ImageField(
         label="Foto", 
-        required=False)
+        required=False, widget=forms.FileInput(attrs={'class':'form-control-file'}))
 
-    cpf = forms.CharField(max_length=14 ,widget=forms.TextInput( attrs={'data-mask':"000.000.000.00",}))
+    cpf = forms.CharField(max_length=14 ,widget=forms.TextInput( attrs={'class':'form-control','data-mask':"000.000.000.00",}))
+
+    saram = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
 
     class Meta:
         model = userProperties
         exclude = ['user']
-
-    # def is_valid(self):
-    #     return True
 
     def save(self,user, commit=True):
         userprop = super(userPropForm, self).save(commit=False)
