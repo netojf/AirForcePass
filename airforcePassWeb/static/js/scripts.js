@@ -91,9 +91,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     let cursorSpan = document.createElement("span");
     cursorSpan.className = 'cursor';
-    cursorSpan.innerHTML = '&nbsp'; 
+    cursorSpan.innerHTML = '&nbsp&nbsp'; 
     const typingDelay = 75;
-    const erasingDelay = 1000;
+    const erasingDelay = 100;
     const newTextDelay = 500; // Delay between current and next text
     let textArrayIndex = 0;
     let charIndex = 0;
@@ -103,7 +103,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     for (let index = 0; index < typeWriterContainer.length; index++) {
 
         staticTexts = typeWriterContainer[index].getElementsByClassName("static-typed-text");
-        console.log(staticTexts);
 
         for (let i = 0; i < staticTexts.length; i++) {
             staticTexts[i].appendChild(cursorSpan); 
