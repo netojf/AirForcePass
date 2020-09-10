@@ -11,9 +11,6 @@ logger = logging.getLogger('app_api') #from LOGGING.loggers in settings.py
 
  #index control to user logged page
 def index(request):
-
-    #check if user is logged 
-    if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('airforcePassWeb:signIn'))
 
 
@@ -60,42 +57,44 @@ def userSignIn(request):
                     'user' : request.user})
     
 
-def user_update(request):
-    if request.user.is_authenticated:
-        userform = userForm(request or None, instance = request.user)
-        userpropform = userPropForm(request or None, instance = request.user.userproperties)
-    else:
-        return render(request, 'users/userSignIn.html',{
-                "userform" : userform,
-                'propertyform' : userpropform,
-                'message' : 'blocked'})
-    if request.method == 'POST':
-        if userform.is_valid() and userpropform.is_valid():
-            userform.save(commit=True)
-            newuser = get_object_or_404(User, username=userform.cleaned_data['username'])
-            # ↓ pass the user to form to make the relationship ↓
-            userpropform.save(newuser,commit=True)
-            return render(request, 'users/userSignIn.html', {
-                        "message" : "logged",
-                        'userform' : userform,
-                        'propertyform' : userpropform})
-        else:
-            # if the form is not valid return the page with modal opened 
-            return render(request, 'users/userSignIn.html',{
-                "userform" : userform,
-                'propertyform' : userpropform,
-                'message' : 'blocked',
-                # ↓ open the modal ↓
-                'modalMessage' : True})
+# def user_update(request):
+#     if request.user.is_authenticated:
+#         userform = userForm(request or None, instance = request.user)
+#         userpropform = userPropForm(request or None, instance = request.user.userproperties)
+#     else:
+#         return render(request, 'users/userSignIn.html',{
+#                 "userform" : userform,
+#                 'propertyform' : userpropform,
+#                 'message' : 'blocked'})
+#     if request.method == 'POST':
+#         if userform.is_valid() and userpropform.is_valid():
+#             userform.save(commit=True)
+#             newuser = get_object_or_404(User, username=userform.cleaned_data['username'])
+#             # ↓ pass the user to form to make the relationship ↓
+#             userpropform.save(newuser,commit=True)
+#             return render(request, 'users/userSignIn.html', {
+#                         "message" : "logged",
+#                         'userform' : userform,
+#                         'propertyform' : userpropform})
+#         else:
+#             # if the form is not valid return the page with modal opened 
+#             return render(request, 'users/userSignIn.html',{
+#                 "userform" : userform,
+#                 'propertyform' : userpropform,
+#                 'message' : 'blocked',
+#                 # ↓ open the modal ↓
+#                 'modalMessage' : True})
 
 
 
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect( str(request.META.get('HTTP_REFERER')), {
-                "message": "Logged Out"
-            })
+    return render(request, 'users/userSignIn.html', {
+                        "message" : "login",
+                        'userform' : userForm(),
+                        'propertyform' : userPropForm()
+                    })
 
 # user register control
 def userSignUp(request, currentmessage = ''):

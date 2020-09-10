@@ -62,12 +62,17 @@ class userForm(ModelForm):
     def clean_username(self):
         username = self.cleaned_data.get("username")
 
-        if User.objects.exclude(pk=self.instance.pk).get(username=username):
+        try:
+            User._default_manager.get(username=username)
+            #if the user exists, then let's raise an error message
+
             raise forms.ValidationError( 
             self.error_messages['username_exists'],  #my error message
-            code='username_exists'  #set the error message key
-            )
-        else:
+
+            code='username_exists',   #set the error message key
+
+                )
+        except User.DoesNotExist:
             return username # if user does not exist so we can continue the registration process
 
 
